@@ -22,3 +22,5 @@ Todo
 - Proper space control
 - Possible frontend
 - Provide answers
+
+Note: SimSun font 16 seems to paste well on LibreOffice.

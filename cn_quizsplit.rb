@@ -64,11 +64,12 @@ end
 firsts = words.keys
 seconds = words.values
 
-# Shuffle both the lists of the first words ans second words.
+# Shuffle both the lists of the first words and second words.
 firsts.shuffle!
 seconds.shuffle!
 
 # Print the randomized sets to stdout.
+# TODO: Make this not completely crappy.
 firsts.length.times do |n|
 	puts "#{(OFFSET + n).chr}) #{firsts[n]}#{"\t" * TABS} \
 		(#{' ' * SPACES}) #{seconds[n]}\t#{'_' * USCORES}"

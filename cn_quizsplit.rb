@@ -23,8 +23,18 @@ TABS = 4
 USCORES = 15
 SPACES = 4
 
-# Hash of phrases.
-words = {}
+class WordGroup
+	attr_reader :init, :tail
+
+	def initialize(init, tail)
+		@init = init
+		@tail = tail
+	end
+end
+
+# List of phrases.
+# Update: Multi-init phrase bug now fixed.
+words = []
 
 if ARGV.length < 1
 	puts "Usage: ruby ./cn_quizsplit.rb PATH_TO_DUMP"
@@ -36,6 +46,7 @@ else
 		lines = f.readlines
 	end
 	# p lines
+
 	lines.each_with_index do |line, num|
 		num += 1
 
@@ -53,24 +64,28 @@ else
 			
 			# If the delimiter exists, split it at that length.
 			split_idx = line.index(DELIM) if line.include?(DELIM)
-
-			words[line[0...split_idx]] = line[split_idx..-1].gsub(DELIM, '')
+		
+			words << WordGroup.new(line[0...split_idx], line[split_idx..-1].gsub(DELIM, ''))
+			# words[line[0...split_idx]] = line[split_idx..-1].gsub(DELIM, '')
 		end
 	end
 end
 
 # p words
 
-firsts = words.keys
-seconds = words.values
+# firsts = words.keys
+# seconds = words.values
+
+inits = words.map { |word| word.init }
+tails = words.map { |word| word.tail }
 
 # Shuffle both the lists of the first words and second words.
-firsts.shuffle!
-seconds.shuffle!
+inits.shuffle!
+tails.shuffle!
 
 # Print the randomized sets to stdout.
 # TODO: Make this not completely crappy.
-firsts.length.times do |n|
-	puts "#{(OFFSET + n).chr}) #{firsts[n]}#{"\t" * TABS} \
-		(#{' ' * SPACES}) #{seconds[n]}\t#{'_' * USCORES}"
+inits.length.times do |n|
+	puts "#{(OFFSET + n).chr}) #{inits[n]}#{"\t" * TABS} \
+		(#{' ' * SPACES}) #{tails[n]}\t#{'_' * USCORES}"
 end
